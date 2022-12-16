@@ -2,14 +2,14 @@ import requests
 import base64
 import json
 #from app import app
-CLIENT_ID = "dfagehsrdjykfuylg"
-APP_SECRET  = "sadfgdhfjklj;k"
+CLIENT_ID = "AQgM3qUsIoidiTXAnKizmCwNvuzwn9Nwhf0vvEza9A8gpVPW_qhpsk2wzAo7h8pckJE_bSmoQLGoHI0y"
+APP_SECRET  = "EMApXQUqkmM1vDGhJd4ukYfaxxl1M0-FzdGbWyI5OjRA6e3vmp-9iprnllQhhw2dQMn_9UW55GcdURNa"
 base = "https://api-m.sandbox.paypal.com"
 
 # create an order
-async def create_order():
-  purchase_amount = "100.00" # TODO: pull amount from a database or session
-  access_token = await generate_access_token()
+def create_order():
+  purchase_amount = "100.00" 
+  access_token = generate_access_token()
   url = f"{base}/v2/checkout/orders"
   response = requests.post(url, json={
     "intent": "CAPTURE",
@@ -17,7 +17,7 @@ async def create_order():
       {
         "amount": {
           "currency_code": "USD",
-          "value": purchase_amount
+          "value": "100"
         },
       },
     ],
@@ -29,8 +29,8 @@ async def create_order():
   return data
 
 # capture payment for an order
-async def capture_payment(order_id):
-  access_token = await generate_access_token()
+def capture_payment(order_id):
+  access_token = generate_access_token()
   url = f"{base}/v2/checkout/orders/{order_id}/capture"
   response = requests.post(url, headers={
     "Content-Type": "application/json",
@@ -40,13 +40,13 @@ async def capture_payment(order_id):
   return data
 
 # generate an access token
-async def generate_access_token():
+def generate_access_token():
   auth = base64.b64encode(f"{CLIENT_ID}:{APP_SECRET}".encode("utf-8")).decode("utf-8")
   response = requests.post(f"{base}/v1/oauth2/token",
                            data="grant_type=client_credentials",
                            headers={"Authorization": f"Basic {auth}"})
   json_data = handle_response(response)
-  return json_data
+  return json_data["access_token"]
 
 # generate a client token
 def generate_client_token():
@@ -69,4 +69,3 @@ def handle_response(response):
     error_message = response.text()
     raise Exception(error_message)
 
-generate_client_token()
