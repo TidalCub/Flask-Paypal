@@ -11,7 +11,7 @@ app.config["DEBUG"] = True
 
 @app.route("/",methods=['GET'])
 async def render_checkout_page():
-  client_id = os.environ["CLIENT_ID"]
+  client_id = "dfagehsrdjykfuylg"
   client_token = await paypal.generate_client_token()
   return render_template("checkout.html", {"client_id": client_id, "client_token": client_token})
 

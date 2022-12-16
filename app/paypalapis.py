@@ -1,9 +1,9 @@
 import requests
 import base64
-
-from app import app
-CLIENT_ID = ""
-APP_SECRET  = app.secret_key
+import json
+#from app import app
+CLIENT_ID = "dfagehsrdjykfuylg"
+APP_SECRET  = "sadfgdhfjklj;k"
 base = "https://api-m.sandbox.paypal.com"
 
 # create an order
@@ -46,11 +46,11 @@ async def generate_access_token():
                            data="grant_type=client_credentials",
                            headers={"Authorization": f"Basic {auth}"})
   json_data = handle_response(response)
-  return json_data["access_token"]
+  return json_data
 
 # generate a client token
-async def generate_client_token():
-  access_token = await generate_access_token()
+def generate_client_token():
+  access_token = generate_access_token()
   response = requests.post(f"{base}/v1/identity/generate-token",
                            headers={
                              "Authorization": f"Bearer {access_token}",
@@ -59,11 +59,14 @@ async def generate_client_token():
                            })
   print("response", response.status_code)
   json_data = handle_response(response)
-  return json_data["client_token"]
+  return json_data
 
-async def handle_response(response):
-  if response.status in (200, 201):
-    return response.json()
+def handle_response(response):
+    if response.status_code in (200, 201):
+        return response.json()
 
-  error_message = await response.text()
-  raise Exception(error_message)
+
+    error_message = response.text()
+    raise Exception(error_message)
+
+generate_client_token()
