@@ -7,8 +7,8 @@ APP_SECRET  = "EMApXQUqkmM1vDGhJd4ukYfaxxl1M0-FzdGbWyI5OjRA6e3vmp-9iprnllQhhw2dQ
 base = "https://api-m.sandbox.paypal.com"
 
 # create an order
-def create_order():
-  purchase_amount = "100.00" 
+def create_order(purchase_amount):
+  
   access_token = generate_access_token()
   url = f"{base}/v2/checkout/orders"
   response = requests.post(url, json={
@@ -16,8 +16,8 @@ def create_order():
     "purchase_units": [
       {
         "amount": {
-          "currency_code": "USD",
-          "value": "100"
+          "currency_code": "GBP",
+          "value": purchase_amount
         },
       },
     ],

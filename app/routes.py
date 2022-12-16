@@ -18,12 +18,13 @@ def render_checkout_page():
 
 @app.route("/api/orders", methods=["POST"])
 def create_order():
-  order = paypal.create_order()
+  order = paypal.create_order("56.32")
   return jsonify(order)
 
 @app.route("/api/orders/<order_id>/capture", methods=["POST"])
 def capture_payment(order_id):
   capture_data = paypal.capture_payment(order_id)
+  print(capture_data)
   return jsonify(capture_data)
 
 
